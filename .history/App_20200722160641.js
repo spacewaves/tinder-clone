@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import React, { useRef, useEffect, useState } from "react";
+import React from "react";
 import {
   StyleSheet,
   Text,
@@ -7,9 +7,7 @@ import {
   Dimensions,
   Image,
   Animated,
-  PanResponder,
 } from "react-native";
-import { render } from "react-dom";
 
 const SCREEN_HEIGHT = Dimensions.get("window").height;
 const SCREEN_WIDTH = Dimensions.get("window").width;
@@ -21,34 +19,15 @@ const Users = [
   { id: "5", uri: require("./src/images/5.jpg") },
 ];
 export default function App() {
-  const position = useRef(new Animated.ValueXY()).current;
-  const panResponder = React.useMemo(
-    () =>
-      PanResponder.create({
-        onStartShouldSetPanResponder: (evt, gestureState) => true,
-        onPanResponderMove: (evt, gestureState) => {
-          position.setValue({ x: gestureState.dx, y: gestureState.dy });
-        },
-        onPanResponderRelease: (evt, gestureState) => {},
-      }),
-    []
-  );
-
-  const renderUsers = () => {
+  renderUsers = () => {
     return Users.map((item, i) => {
       return (
         <Animated.View
-          {...panResponder.panHandlers}
-          key={item.id}
-          style={[
-            { transform: position.getTranslateTransform() },
-            {
-              height: SCREEN_HEIGHT - 120,
-              width: SCREEN_WIDTH,
-              padding: 10,
-              position: "absolute",
-            },
-          ]}
+          style={{
+            height: SCREEN_HEIGHT - 120,
+            width: SCREEN_WIDTH,
+            padding: 10,
+          }}
         >
           <Image
             style={{
@@ -58,18 +37,16 @@ export default function App() {
               resizeMode: "cover",
               borderRadius: 20,
             }}
-            source={item.uri}
-          />
+            source={Users[0].uri}
+          ></Image>
         </Animated.View>
       );
-    }).reverse();
+    });
   };
-
   return (
     <View style={{ flex: 1 }}>
       <View style={{ height: 60 }}></View>
-      <View style={{ flex: 1 }}>{renderUsers()}</View>
-
+      <View style={{ flex: 1 }}></View>
       <View style={{ height: 60 }}></View>
     </View>
   );

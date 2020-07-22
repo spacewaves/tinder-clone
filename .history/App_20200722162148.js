@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import React, { useRef, useEffect, useState } from "react";
+import React from "react";
 import {
   StyleSheet,
   Text,
@@ -7,7 +7,6 @@ import {
   Dimensions,
   Image,
   Animated,
-  PanResponder,
 } from "react-native";
 import { render } from "react-dom";
 
@@ -21,34 +20,17 @@ const Users = [
   { id: "5", uri: require("./src/images/5.jpg") },
 ];
 export default function App() {
-  const position = useRef(new Animated.ValueXY()).current;
-  const panResponder = React.useMemo(
-    () =>
-      PanResponder.create({
-        onStartShouldSetPanResponder: (evt, gestureState) => true,
-        onPanResponderMove: (evt, gestureState) => {
-          position.setValue({ x: gestureState.dx, y: gestureState.dy });
-        },
-        onPanResponderRelease: (evt, gestureState) => {},
-      }),
-    []
-  );
 
   const renderUsers = () => {
     return Users.map((item, i) => {
       return (
         <Animated.View
-          {...panResponder.panHandlers}
-          key={item.id}
-          style={[
-            { transform: position.getTranslateTransform() },
             {
               height: SCREEN_HEIGHT - 120,
               width: SCREEN_WIDTH,
               padding: 10,
               position: "absolute",
             },
-          ]}
         >
           <Image
             style={{
@@ -62,7 +44,7 @@ export default function App() {
           />
         </Animated.View>
       );
-    }).reverse();
+    });
   };
 
   return (

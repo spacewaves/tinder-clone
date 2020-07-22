@@ -21,18 +21,18 @@ const Users = [
   { id: "5", uri: require("./src/images/5.jpg") },
 ];
 export default function App() {
-  const position = useRef(new Animated.ValueXY()).current;
-  const panResponder = React.useMemo(
-    () =>
-      PanResponder.create({
-        onStartShouldSetPanResponder: (evt, gestureState) => true,
-        onPanResponderMove: (evt, gestureState) => {
-          position.setValue({ x: gestureState.dx, y: gestureState.dy });
-        },
-        onPanResponderRelease: (evt, gestureState) => {},
-      }),
-    []
-  );
+  const position = useRef(new Animated.Value(0)).current;
+
+  const panResponder = React.useRef(
+    PanResponder.create({
+      onStartShouldSetPanResponder: (evt, gestureState) => true,
+      onPanResponderMove: (evt, gestureState) => {
+        position.setValue({ x: gestureState.dx, y: gestureState.dy });
+      },
+
+      onPanResponderRelease: (evt, gestureState) => {},
+    })
+  ).current;
 
   const renderUsers = () => {
     return Users.map((item, i) => {

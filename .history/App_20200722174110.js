@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import React, { useRef, useEffect, useState } from "react";
+import React from "react";
 import {
   StyleSheet,
   Text,
@@ -21,18 +21,16 @@ const Users = [
   { id: "5", uri: require("./src/images/5.jpg") },
 ];
 export default function App() {
-  const position = useRef(new Animated.ValueXY()).current;
-  const panResponder = React.useMemo(
-    () =>
-      PanResponder.create({
-        onStartShouldSetPanResponder: (evt, gestureState) => true,
-        onPanResponderMove: (evt, gestureState) => {
-          position.setValue({ x: gestureState.dx, y: gestureState.dy });
-        },
-        onPanResponderRelease: (evt, gestureState) => {},
-      }),
-    []
-  );
+  const panResponder = React.useRef(
+    PanResponder.create({
+      onStartShouldSetPanResponder: (evt, gestureState) => true,
+      onPanResponderMove: (evt, gestureState) => {
+        position.setValue({ x: gestureState.dx, y: gestureState.dy });
+      },
+
+      onPanResponderRelease: (evt, gestureState) => {},
+    })
+  ).current;
 
   const renderUsers = () => {
     return Users.map((item, i) => {
@@ -40,15 +38,12 @@ export default function App() {
         <Animated.View
           {...panResponder.panHandlers}
           key={item.id}
-          style={[
-            { transform: position.getTranslateTransform() },
-            {
-              height: SCREEN_HEIGHT - 120,
-              width: SCREEN_WIDTH,
-              padding: 10,
-              position: "absolute",
-            },
-          ]}
+          style={{
+            height: SCREEN_HEIGHT - 120,
+            width: SCREEN_WIDTH,
+            padding: 10,
+            position: "absolute",
+          }}
         >
           <Image
             style={{
